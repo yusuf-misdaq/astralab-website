@@ -614,12 +614,13 @@
         }
         animate();
         
-        // ENTER BUTTON
-        function enterSite() {
-            console.log('ENTER SITE CALLED');
-            document.getElementById('landing-page').classList.add('hide');
-            document.body.classList.remove('no-scroll');
-        }
+// ENTER BUTTON
+function enterSite() {
+    console.log('ENTER SITE CALLED');
+    window.scrollTo(0, 0);  // ← ADD THIS LINE
+    document.getElementById('landing-page').classList.add('hide');
+    document.body.classList.remove('no-scroll');
+}
         
         // MENU
         function toggleMenu() {
