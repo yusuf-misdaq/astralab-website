@@ -346,11 +346,17 @@
         </div>
     </section>
 
-    <!-- BOOKING -->
+        <!-- BOOKING -->
 <section id="booking">
     <div class="section-content">
         <h2>Book Your Event</h2>
-        <form class="booking-form" onsubmit="return handleBookingForm(event)">
+        <form class="booking-form" action="https://formsubmit.co/astralab33@gmail.com" method="POST">
+            <!-- Formsubmit Configuration -->
+            <input type="hidden" name="_subject" value="New Event Booking Inquiry - Astralab">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_next" value="https://yusuf-misdaq.github.io/astralab-website/#booking">
+            
             <div class="form-group">
                 <label>Name *</label>
                 <input type="text" name="name" required placeholder="Your name">
@@ -674,12 +680,7 @@ function scrollToSection(id) {
         }
         
         // FORMS
-       // BOOKING FORM - sends email
-function handleBookingForm(e) {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData);
-    
+   
     // Create mailto link with form data
     const subject = encodeURIComponent('Event Booking Inquiry from ' + data.name);
     const body = encodeURIComponent(
@@ -702,12 +703,11 @@ function handleBookingForm(e) {
 // NEWSLETTER FORMS
 function handleForm(e) {
     e.preventDefault();
-    const email = e.target.querySelector('input[type="email"]').value;
-    window.location.href = `mailto:astralab33@gmail.com?subject=Newsletter Subscription&body=Please add ${email} to the mailing list.`;
-    alert('Thank you! We will add you to our mailing list.');
+    alert('Thank you! We will contact you shortly.');
     e.target.reset();
     return false;
 }
+
     </script>
 </body>
 </html>
