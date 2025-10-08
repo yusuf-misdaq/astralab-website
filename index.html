@@ -337,49 +337,49 @@
     </section>
 
     <!-- BOOKING -->
-    <section id="booking">
-        <div class="section-content">
-            <h2>Book Your Event</h2>
-            <form class="booking-form" onsubmit="return handleBookingForm(event)">
-                <div class="form-group">
-                    <label>Name *</label>
-                    <input type="text" required placeholder="Your name">
-                </div>
-                <div class="form-group">
-                    <label>Email *</label>
-                    <input type="email" required placeholder="your@email.com">
-                </div>
-                <div class="form-group">
-                    <label>Phone</label>
-                    <input type="tel" placeholder="(XXX) XXX-XXXX">
-                </div>
-                <div class="form-group">
-                    <label>Preferred Date *</label>
-                    <input type="date" required>
-                </div>
-                <div class="form-group">
-                    <label>Event Type *</label>
-                    <select required>
-                        <option value="">Select type</option>
-                        <option>Private Event</option>
-                        <option>Corporate</option>
-                        <option>Workshop</option>
-                        <option>Celebration</option>
-                        <option>Production</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Number of Guests</label>
-                    <input type="number" placeholder="50" min="1">
-                </div>
-                <div class="form-group">
-                    <label>Tell us about your event *</label>
-                    <textarea required placeholder="Describe your event..."></textarea>
-                </div>
-                <button type="submit" class="cta-button" style="width:100%">Submit Inquiry</button>
-            </form>
-        </div>
-    </section>
+<section id="booking">
+    <div class="section-content">
+        <h2>Book Your Event</h2>
+        <form class="booking-form" onsubmit="return handleBookingForm(event)">
+            <div class="form-group">
+                <label>Name *</label>
+                <input type="text" name="name" required placeholder="Your name">
+            </div>
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" name="email" required placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="tel" name="phone" placeholder="(XXX) XXX-XXXX">
+            </div>
+            <div class="form-group">
+                <label>Preferred Date *</label>
+                <input type="date" name="date" required>
+            </div>
+            <div class="form-group">
+                <label>Event Type *</label>
+                <select name="eventType" required>
+                    <option value="">Select type</option>
+                    <option>Private Event</option>
+                    <option>Corporate</option>
+                    <option>Workshop</option>
+                    <option>Celebration</option>
+                    <option>Production</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Number of Guests</label>
+                <input type="number" name="guests" placeholder="50" min="1">
+            </div>
+            <div class="form-group">
+                <label>Tell us about your event *</label>
+                <textarea name="details" required placeholder="Describe your event..."></textarea>
+            </div>
+            <button type="submit" class="cta-button" style="width:100%">Submit Inquiry</button>
+        </form>
+    </div>
+</section>
 
     <!-- STORE LINK -->
     <section>
