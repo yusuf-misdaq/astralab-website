@@ -617,7 +617,7 @@
 // ENTER BUTTON
 function enterSite() {
     console.log('ENTER SITE CALLED');
-    window.scrollTo(0, 0);  // ← ADD THIS LINE
+    window.scrollTo(0, 0);
     document.getElementById('landing-page').classList.add('hide');
     document.body.classList.remove('no-scroll');
 }
@@ -628,12 +628,12 @@ function enterSite() {
             document.getElementById('navMenu').classList.toggle('active');
         }
         
-        // SCROLL
-        function scrollTo(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-            document.querySelector('.hamburger').classList.remove('active');
-            document.getElementById('navMenu').classList.remove('active');
-        }
+ // SCROLL
+function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    document.querySelector('.hamburger').classList.remove('active');
+    document.getElementById('navMenu').classList.remove('active');
+}
         
         // FAQ
         function toggleFAQ(el) {
