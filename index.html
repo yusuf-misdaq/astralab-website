@@ -340,7 +340,7 @@
     <section id="booking">
         <div class="section-content">
             <h2>Book Your Event</h2>
-            <form class="booking-form" onsubmit="return handleForm(event)">
+            <form class="booking-form" onsubmit="return handleBookingForm(event)">
                 <div class="form-group">
                     <label>Name *</label>
                     <input type="text" required placeholder="Your name">
@@ -647,12 +647,40 @@ function scrollToSection(id) {
         }
         
         // FORMS
-        function handleForm(e) {
-            e.preventDefault();
-            alert('Thank you! We will contact you shortly.');
-            e.target.reset();
-            return false;
-        }
+       // BOOKING FORM - sends email
+function handleBookingForm(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
+    
+    // Create mailto link with form data
+    const subject = encodeURIComponent('Event Booking Inquiry from ' + data.name);
+    const body = encodeURIComponent(
+        `Name: ${data.name}\n` +
+        `Email: ${data.email}\n` +
+        `Phone: ${data.phone || 'Not provided'}\n` +
+        `Date: ${data.date}\n` +
+        `Event Type: ${data.eventType}\n` +
+        `Number of Guests: ${data.guests || 'Not specified'}\n\n` +
+        `Details:\n${data.details}`
+    );
+    
+    window.location.href = `mailto:astralab33@gmail.com?subject=${subject}&body=${body}`;
+    
+    alert('Thank you! Your email client will open with the inquiry details.');
+    e.target.reset();
+    return false;
+}
+
+// NEWSLETTER FORMS
+function handleForm(e) {
+    e.preventDefault();
+    const email = e.target.querySelector('input[type="email"]').value;
+    window.location.href = `mailto:astralab33@gmail.com?subject=Newsletter Subscription&body=Please add ${email} to the mailing list.`;
+    alert('Thank you! We will add you to our mailing list.');
+    e.target.reset();
+    return false;
+}
     </script>
 </body>
 </html>
