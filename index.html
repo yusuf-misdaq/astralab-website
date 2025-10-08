@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astralab - Los Angeles Event Space</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --cream: #F5F1E8; --dark: #0a0a0a; --accent: #8a2be2; }
+        
+        body { font-family: 'Inter', sans-serif; background: var(--dark); color: white; overflow-x: hidden; }
+        body.no-scroll { overflow: hidden; }
+        h1, h2, h3 { font-family: 'Work Sans', sans-serif; font-weight: 400; letter-spacing: 0.5px; }
+        
+        /* CANVAS BACKGROUND */
+        #canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        .content { position: relative; z-index: 2; }
+        
+        /* LANDING PAGE */
+        #landing-page {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 10000;
+            transition: opacity 1.5s;
+        }
+        #landing-page.hide { opacity: 0; pointer-events: none; }
+        
+        #ripple-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900"%3E%3Crect fill="%23190a2e" width="1600" height="900"/%3E%3Ccircle cx="800" cy="450" r="300" fill="%23ff006680"/%3E%3Ccircle cx="400" cy="600" r="200" fill="%2300ffff40"/%3E%3C/svg%3E');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter:
+                sepia(0.3)
+                hue-rotate(200deg)
+                saturate(1.5)
+                contrast(1.2)
+                brightness(0.9);
+            background-image:
+                linear-gradient(rgba(255,0,255,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,255,0.1) 1px, transparent 1px),
+                url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900"%3E%3Crect fill="%23190a2e" width="1600" height="900"/%3E%3Ccircle cx="800" cy="450" r="300" fill="%23ff006680"/%3E%3Ccircle cx="400" cy="600" r="200" fill="%2300ffff40"/%3E%3C/svg%3E');
+            background-size:
+                50px 50px,
+                50px 50px,
+                cover;
+        }
+        
+        #ripple-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            box-shadow:
+                inset 0 0 50px rgba(138, 43, 226, 0.3),
+                0 0 100px rgba(0, 255, 255, 0.2);
+            pointer-events: none;
+        }
+        
+        .landing-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 10; }
+        .landing-title { font-size: clamp(2rem, 5vw, 4rem); color: #ff00ff; font-family: 'Courier New', monospace; text-shadow: 0 0 10px #ff00ff; margin-bottom: 2rem; }
+        .enter-btn { background: transparent; border: 2px solid #ff00ff; color: #ff00ff; padding: 1.5rem 4rem; font-size: 1.5rem; font-family: 'Courier New', monospace; cursor: pointer; text-transform: uppercase; letter-spacing: 3px; transition: all 0.3s; }
+        .enter-btn:hover { color: #00ffff; border-color: #00ffff; transform: scale(1.05); }
+        
+        /* HEADER */
+        header { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,10,0.8); backdrop-filter: blur(10px); }
+        .logo-small { height: 40px; cursor: pointer; }
+        .hamburger { width: 30px; height: 20px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; }
+        .hamburger span { width: 100%; height: 2px; background: white; transition: all 0.3s; }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(7px, 7px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+        
+        /* NAV MENU */
+        .nav-menu { position: fixed; top: 0; right: -100%; width: 350px; height: 100vh; background: rgba(10,10,10,0.98); backdrop-filter: blur(20px); padding: 100px 40px; transition: right 0.4s; z-index: 999; }
+        .nav-menu.active { right: 0; }
+        .nav-menu ul { list-style: none; }
+        .nav-menu li { margin-bottom: 2rem; }
+        .nav-menu a { color: white; text-decoration: none; font-size: 1.3rem; font-weight: 400; transition: all 0.3s; display: block; letter-spacing: 1px; }
+        .nav-menu a:hover { color: var(--accent); transform: translateX(10px); }
+        
+        /* SECTIONS */
+        section { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 4rem 2rem; position: relative; }
+        .section-content { max-width: 1200px; width: 100%; background: rgba(245,241,232,0.05); backdrop-filter: blur(10px); border-radius: 20px; padding: 3rem; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        h2 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 2rem; text-align: center; font-weight: 300; letter-spacing: 2px; }
+        
+        /* HERO */
+        .hero { flex-direction: column; text-align: center; justify-content: center; }
+        .hero-logo { width: 100%; max-width: 600px; margin-bottom: 2rem; }
+        .hero h1 { font-size: clamp(3rem, 8vw, 7rem); font-weight: 300; margin-bottom: 1rem; letter-spacing: 3px; }
+        .hero p { font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 300; opacity: 0.9; margin-bottom: 3rem; }
+        .cta-button { background: var(--cream); color: var(--dark); padding: 1.2rem 3rem; border: none; border-radius: 50px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; letter-spacing: 1px; }
+        .cta-button:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(245,241,232,0.3); }
+        
+        /* NEWSLETTER */
+        .newsletter { max-width: 600px; margin: 4rem auto; text-align: center; padding: 3rem; background: rgba(245,241,232,0.05); backdrop-filter: blur(10px); border-radius: 20px; }
+        .newsletter h3 { font-size: 1.8rem; margin-bottom: 1rem; color: var(--cream); }
+        .newsletter-form { display: flex; gap: 1rem; margin-top: 1.5rem; }
+        .newsletter-form input { flex: 1; padding: 1rem 1.5rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 50px; background: rgba(255,255,255,0.05); color: white; font-size: 1rem; }
+        .newsletter-form button { padding: 1rem 2.5rem; background: var(--cream); color: var(--dark); border: none; border-radius: 50px; font-weight: 500; cursor: pointer; letter-spacing: 1px; }
+        
+        /* ABOUT */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; margin-top: 2rem; }
+        .about-text h3 { font-size: 1.3rem; margin-bottom: 1rem; color: var(--cream); }
+        .about-text p { line-height: 1.8; margin-bottom: 1.5rem; opacity: 0.9; }
+        .about-images { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .about-image-wrapper { position: relative; overflow: hidden; border-radius: 12px; }
+        .about-image-wrapper:first-child { grid-column: 1/-1; }
+        .about-image { width: 100%; height: 250px; object-fit: cover; box-shadow: 0 10px 40px rgba(138,43,226,0.3); }
+        .about-image-wrapper:first-child .about-image { height: 350px; }
+        
+        /* GALLERY */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .gallery-item { width: 100%; height: 400px; position: relative; border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.3s; }
+        .gallery-item:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(138,43,226,0.3); }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* PAGE LINK CARDS */
+        .page-card { background: rgba(245,241,232,0.05); backdrop-filter: blur(10px); border-radius: 20px; padding: 3rem; text-align: center; cursor: pointer; transition: all 0.3s; border: 2px solid rgba(245,241,232,0.1); }
+        .page-card:hover { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(138,43,226,0.4); border-color: var(--accent); }
+        .page-card img { width: 100%; max-width: 400px; height: 300px; object-fit: cover; border-radius: 12px; margin-bottom: 2rem; }
+        .page-card h3 { font-size: 2rem; margin-bottom: 1rem; color: var(--cream); }
+        
+        /* LOCATION */
+        .location-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; margin-top: 2rem; }
+        .map-container { border-radius: 12px; overflow: hidden; min-height: 500px; }
+        .map-container img { width: 100%; height: 500px; object-fit: cover; }
+        .location-info { background: rgba(245,241,232,0.1); padding: 2rem; border-radius: 12px; }
+        .info-item { margin-bottom: 2rem; }
+        .info-item h3 { font-size: 0.9rem; margin-bottom: 0.8rem; color: var(--cream); text-transform: uppercase; letter-spacing: 1px; }
+        .info-item p { line-height: 1.8; opacity: 0.9; }
+        
+        /* BOOKING FORM */
+        .booking-form { max-width: 600px; margin: 2rem auto; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--cream); }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 1rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: rgba(255,255,255,0.05); color: white; font-size: 1rem; }
+        .form-group textarea { min-height: 120px; resize: vertical; }
+        
+        /* FAQ */
+        .faq-container { max-width: 800px; margin: 2rem auto; }
+        .faq-item { background: rgba(245,241,232,0.05); margin-bottom: 1rem; border-radius: 12px; overflow: hidden; }
+        .faq-question { padding: 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 500; transition: background 0.3s; }
+        .faq-question:hover { background: rgba(245,241,232,0.1); }
+        .faq-arrow { transition: transform 0.3s; font-size: 1.5rem; }
+        .faq-item.active .faq-arrow { transform: rotate(180deg); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s; padding: 0 1.5rem; }
+        .faq-item.active .faq-answer { max-height: 500px; padding: 0 1.5rem 1.5rem; }
+        
+        /* FOOTER */
+        footer { background: rgba(10,10,10,0.95); padding: 4rem 2rem 2rem; text-align: center; }
+        .footer-logo { width: 200px; margin-bottom: 2rem; opacity: 0.7; }
+        .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .footer-links a { color: white; text-decoration: none; opacity: 0.7; transition: opacity 0.3s; }
+        .footer-social { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 2rem; }
+        .copyright { opacity: 0.5; font-size: 0.9rem; }
+        
+        @media (max-width: 768px) {
+            .about-grid, .location-grid { grid-template-columns: 1fr; }
+            .newsletter-form { flex-direction: column; }
+            .about-images { grid-template-columns: 1fr; }
+            .about-image-wrapper:first-child { grid-column: 1; }
+        }
+    </style>
+</head>
+<body class="no-scroll">
+    
+    <!-- CANVAS BACKGROUND -->
+    <canvas id="canvas"></canvas>
+    
+    <div class="content">
+    
+    <!-- LANDING PAGE -->
+    <div id="landing-page">
+        <div id="ripple-container"></div>
+        <div class="landing-center">
+            <h1 class="landing-title">Welcome 2 Astralab</h1>
+            <button class="enter-btn" onclick="enterSite()">ENTER HERE</button>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <img src="https://i.imgur.com/YOUR_LOGO.png" alt="Astralab" class="logo-small" onclick="scrollTo('hero')">
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+
+    <!-- NAV MENU -->
+    <nav class="nav-menu" id="navMenu">
+        <ul>
+            <li><a href="#hero" onclick="scrollTo('hero')">Home</a></li>
+            <li><a href="#about" onclick="scrollTo('about')">About Us</a></li>
+            <li><a href="#gallery" onclick="scrollTo('gallery')">Past Events</a></li>
+            <li><a href="partners.html">Partners & Services</a></li>
+            <li><a href="#calendar" onclick="scrollTo('calendar')">Calendar</a></li>
+            <li><a href="#booking" onclick="scrollTo('booking')">Book Space</a></li>
+            <li><a href="store.html">Store</a></li>
+            <li><a href="#faq" onclick="scrollTo('faq')">FAQ</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <img src="https://i.imgur.com/YOUR_LOGO.png" alt="Astralab" class="hero-logo">
+        <p>new space universe</p>
+        <a href="#booking" class="cta-button" onclick="scrollTo('booking')">Book Your Event</a>
+    </section>
+
+    <!-- NEWSLETTER 1 -->
+    <div class="newsletter">
+        <h3>Stay Connected</h3>
+        <p>Join our mailing list for exclusive updates and event announcements.</p>
+        <form class="newsletter-form" onsubmit="return handleForm(event)">
+            <input type="email" placeholder="Enter your email" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </div>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="section-content">
+            <h2>About Astralab</h2>
+            <div class="about-grid">
+                <div class="about-text">
+                    <h3>Our Story</h3>
+                    <p>Astralab is a transformative event space in the heart of Los Angeles, where creativity meets cosmic inspiration.</p>
+                    <h3>Our Mission</h3>
+                    <p>We believe in creating spaces that transcend the ordinary. Whether you're hosting an intimate gathering or a large celebration, Astralab provides the perfect backdrop.</p>
+                    <h3>The Space</h3>
+                    <p>Our venue features modern amenities, customizable lighting, and a distinctive atmosphere that adapts to your vision.</p>
+                </div>
+                <div class="about-images">
+                    <div class="about-image-wrapper">
+                        <img src="https://via.placeholder.com/800x350/190a2e/fff?text=Image+1" alt="Space 1" class="about-image">
+                    </div>
+                    <div class="about-image-wrapper">
+                        <img src="https://via.placeholder.com/400x250/2d1f52/fff?text=Image+2" alt="Space 2" class="about-image">
+                    </div>
+                    <div class="about-image-wrapper">
+                        <img src="https://via.placeholder.com/400x250/1a0f3e/fff?text=Image+3" alt="Space 3" class="about-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery">
+        <div class="section-content">
+            <h2>Past Events</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item"><img src="https://via.placeholder.com/600x400/190a2e/fff?text=Event+1" alt="Event 1"></div>
+                <div class="gallery-item"><img src="https://via.placeholder.com/600x400/2d1f52/fff?text=Event+2" alt="Event 2"></div>
+                <div class="gallery-item"><img src="https://via.placeholder.com/600x400/1a0f3e/fff?text=Event+3" alt="Event 3"></div>
+                <div class="gallery-item"><img src="https://via.placeholder.com/600x400/f5f1e8/333?text=Event+4" alt="Event 4"></div>
+                <div class="gallery-item"><img src="https://via.placeholder.com/600x400/e6d4b4/333?text=Event+5" alt="Event 5"></div>
+                <div class="gallery-item"><img src="https://via.placeholder.com/600x400/190a2e/fff?text=Event+6" alt="Event 6"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEWSLETTER 2 -->
+    <div class="newsletter">
+        <h3>Don't Miss Out</h3>
+        <p>Get early access to exclusive events and special member pricing.</p>
+        <form class="newsletter-form" onsubmit="return handleForm(event)">
+            <input type="email" placeholder="Your email" required>
+            <button type="submit">Join Now</button>
+        </form>
+    </div>
+
+    <!-- PARTNERS LINK -->
+    <section>
+        <div class="section-content">
+            <div class="page-card" onclick="window.location='partners.html'">
+                <img src="https://via.placeholder.com/800x300/190a2e/fff?text=Partners" alt="Partners">
+                <h3>Partners & Services</h3>
+                <p>Discover our trusted partners and comprehensive event services</p>
+                <span class="cta-button">Explore Partners →</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- CALENDAR -->
+    <section id="calendar">
+        <div class="section-content">
+            <h2>Availability Calendar</h2>
+            <div style="text-align:center; padding:3rem; background:rgba(255,255,255,0.05); border-radius:12px;">
+                <p>📅 Calendar integration coming soon</p>
+                <p style="margin-top:1rem; opacity:0.7;">Use Calendly or Cal.com for Apple Calendar sync</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section id="booking">
+        <div class="section-content">
+            <h2>Book Your Event</h2>
+            <form class="booking-form" onsubmit="return handleForm(event)">
+                <div class="form-group">
+                    <label>Name *</label>
+                    <input type="text" required placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" required placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" placeholder="(XXX) XXX-XXXX">
+                </div>
+                <div class="form-group">
+                    <label>Preferred Date *</label>
+                    <input type="date" required>
+                </div>
+                <div class="form-group">
+                    <label>Event Type *</label>
+                    <select required>
+                        <option value="">Select type</option>
+                        <option>Private Event</option>
+                        <option>Corporate</option>
+                        <option>Workshop</option>
+                        <option>Celebration</option>
+                        <option>Production</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Number of Guests</label>
+                    <input type="number" placeholder="50" min="1">
+                </div>
+                <div class="form-group">
+                    <label>Tell us about your event *</label>
+                    <textarea required placeholder="Describe your event..."></textarea>
+                </div>
+                <button type="submit" class="cta-button" style="width:100%">Submit Inquiry</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- STORE LINK -->
+    <section>
+        <div class="section-content">
+            <div class="page-card" onclick="window.location='store.html'">
+                <img src="https://via.placeholder.com/800x300/2d1f52/fff?text=Store" alt="Store">
+                <h3>Silk Road Store</h3>
+                <p>Explore our curated collection of unique items</p>
+                <span class="cta-button">Visit Store →</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOCATION -->
+    <section id="location">
+        <div class="section-content">
+            <h2>Find Us</h2>
+            <div class="location-grid">
+                <div class="map-container">
+                    <a href="https://www.google.com/maps/place/678+S+La+Fayette+Park+Pl,+Los+Angeles,+CA+90057" target="_blank">
+                        <img src="https://via.placeholder.com/600x500/190a2e/fff?text=Click+for+Google+Maps" alt="Map">
+                    </a>
+                </div>
+                <div class="location-info">
+                    <div class="info-item">
+                        <h3>Address</h3>
+                        <p>678 La Fayette Park Place<br>Suite 678<br>Los Angeles, CA 90057</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>Hours</h3>
+                        <p>By Appointment Only</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>Contact</h3>
+                        <p>Phone: (213) 915-0014<br>Email: info@astralabla.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+        <div class="section-content">
+            <h2>FAQ</h2>
+            <div class="faq-container">
+                <div class="faq-item" onclick="toggleFAQ(this)">
+                    <div class="faq-question">
+                        <span>What types of events can I host?</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Astralab is perfect for celebrations, corporate events, workshops, productions, and creative projects.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="toggleFAQ(this)">
+                    <div class="faq-question">
+                        <span>What is the capacity?</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Capacity varies based on setup. Contact us to discuss your needs.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="toggleFAQ(this)">
+                    <div class="faq-question">
+                        <span>Can I schedule a tour?</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutely! Contact us to schedule a private tour.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="newsletter" style="margin-bottom:3rem">
+            <h3>Last Chance</h3>
+            <p>Be the first to know about upcoming events.</p>
+            <form class="newsletter-form" onsubmit="return handleForm(event)">
+                <input type="email" placeholder="Your email" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+        <img src="https://i.imgur.com/YOUR_LOGO.png" alt="Astralab" class="footer-logo">
+        <div class="footer-links">
+            <a href="#about">About</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#location">Location</a>
+            <a href="#booking">Book</a>
+            <a href="store.html">Store</a>
+        </div>
+        <div class="footer-social">
+            <a href="https://instagram.com/astralab_la" target="_blank">📷</a>
+            <a href="mailto:info@astralabla.com">✉️</a>
+        </div>
+        <p class="copyright">© 2025 Astralab Los Angeles</p>
+    </footer>
+    
+    </div><!-- end content wrapper -->
+
+    <!-- RIPPLES LIBRARIES (Optional Enhancement) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.ripples/0.5.3/jquery.ripples.min.js"></script>
+
+    <script>
+        // RIPPLES EFFECT ON LANDING PAGE (Optional - site works without it)
+        if (typeof jQuery !== 'undefined' && jQuery.fn && jQuery.fn.ripples) {
+            $(document).ready(function() {
+                try {
+                    $('#ripple-container').ripples({
+                        resolution: 256,
+                        dropRadius: 20,
+                        perturbance: 0.04,
+                        imageUrl: null,
+                        interactive: true,
+                        crossOrigin: ''
+                    });
+                    
+                    // Auto-drop ambient ripples
+                    setInterval(function() {
+                        var x = Math.random() * window.innerWidth;
+                        var y = Math.random() * window.innerHeight;
+                        $('#ripple-container').ripples('drop', x, y, 10, 0.05);
+                    }, 2000);
+                    
+                    console.log('Ripples initialized!');
+                } catch(e) {
+                    console.log('Ripples not supported:', e);
+                }
+            });
+        }
+        
+        // CANVAS ANIMATION
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.hue = Math.random() * 60 + 240;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                if (this.y < 0 || this.y > canvas.height || this.x < 0 || this.x > canvas.width) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.fillStyle = `hsla(${this.hue}, 70%, 60%, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        class GeometricShape {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 100 + 50;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.002;
+                this.opacity = Math.random() * 0.1 + 0.05;
+                this.sides = Math.random() > 0.5 ? 6 : 8;
+            }
+            update() {
+                this.rotation += this.rotationSpeed;
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.strokeStyle = `rgba(138, 43, 226, ${this.opacity})`;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                for (let i = 0; i < this.sides; i++) {
+                    const angle = (Math.PI * 2 * i) / this.sides;
+                    const x = Math.cos(angle) * this.size;
+                    const y = Math.sin(angle) * this.size;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        const particles = Array.from({ length: 100 }, () => new Particle());
+        const shapes = Array.from({ length: 8 }, () => new GeometricShape());
+
+        function animate() {
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            shapes.forEach(s => { s.update(); s.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+        
+        // ENTER BUTTON
+        function enterSite() {
+            document.getElementById('landing-page').classList.add('hide');
+            document.body.classList.remove('no-scroll');
+        }
+        
+        // MENU
+        function toggleMenu() {
+            document.querySelector('.hamburger').classList.toggle('active');
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+        
+        // SCROLL
+        function scrollTo(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+            document.querySelector('.hamburger').classList.remove('active');
+            document.getElementById('navMenu').classList.remove('active');
+        }
+        
+        // FAQ
+        function toggleFAQ(el) {
+            el.classList.toggle('active');
+        }
+        
+        // FORMS
+        function handleForm(e) {
+            e.preventDefault();
+            alert('Thank you! We will contact you shortly.');
+            e.target.reset();
+            return false;
+        }
+    </script>
+</body>
+</html>

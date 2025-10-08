@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partners & Services - Astralab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #F5F1E8;
+            --dark: #0a0a0a;
+            --accent: #8a2be2;
+            --text: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            overflow-x: hidden;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        h1, h2, h3 {
+            font-family: 'Work Sans', sans-serif;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        /* Canvas Background */
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo-small {
+            height: 40px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .back-button {
+            background: transparent;
+            border: 2px solid var(--cream);
+            color: var(--cream);
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Work Sans', sans-serif;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            background: var(--cream);
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 300;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Partners Grid */
+        .partners-section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        .partner-card {
+            background: rgba(245, 241, 232, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            border: 2px solid rgba(245, 241, 232, 0.1);
+        }
+
+        .partner-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(138, 43, 226, 0.3);
+            border-color: var(--accent);
+        }
+
+        .partner-logo {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            margin-bottom: 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .partner-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--cream);
+        }
+
+        .partner-card p {
+            line-height: 1.8;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .partner-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .partner-link:hover {
+            opacity: 0.7;
+        }
+
+        /* Services Section */
+        .services-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-item {
+            background: rgba(245, 241, 232, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .service-item:hover {
+            transform: translateY(-5px);
+            background: rgba(245, 241, 232, 0.08);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-item h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--cream);
+        }
+
+        .service-item p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 10, 10, 0.95);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 5rem;
+        }
+
+        .copyright {
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 1.5rem;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .partners-section {
+                padding: 3rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <header>
+        <img src="https://i.imgur.com/YOUR_UPLOADED_LOGO.png" alt="Astralab" class="logo-small" onclick="goBack()">
+        <button class="back-button" onclick="goBack()">← Back to Home</button>
+    </header>
+
+    <div class="content">
+        <section class="hero">
+            <div>
+                <h1>Partners & Services</h1>
+                <p>We collaborate with the best in the industry to bring you exceptional event experiences</p>
+            </div>
+        </section>
+
+        <section class="partners-section">
+            <h2 class="section-title">Our Trusted Partners</h2>
+            <div class="partners-grid">
+                <!-- Partner 1 -->
+                <div class="partner-card">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 150'%3E%3Crect fill='%23190a2e' width='400' height='150'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='24' fill='%23fff' opacity='0.5'%3EPartner Logo 1%3C/text%3E%3C/svg%3E" alt="Partner 1" class="partner-logo">
+                    <h3>Partner Name</h3>
+                    <p>Description of partner services and how they enhance your event experience at Astralab.</p>
+                    <a href="#" class="partner-link">Visit Website →</a>
+                </div>
+
+                <!-- Partner 2 -->
+                <div class="partner-card">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 150'%3E%3Crect fill='%232d1f52' width='400' height='150'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='24' fill='%23fff' opacity='0.5'%3EPartner Logo 2%3C/text%3E%3C/svg%3E" alt="Partner 2" class="partner-logo">
+                    <h3>Partner Name</h3>
+                    <p>Description of partner services and how they enhance your event experience at Astralab.</p>
+                    <a href="#" class="partner-link">Visit Website →</a>
+                </div>
+
+                <!-- Partner 3 -->
+                <div class="partner-card">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 150'%3E%3Crect fill='%231a0f3e' width='400' height='150'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='24' fill='%23fff' opacity='0.5'%3EPartner Logo 3%3C/text%3E%3C/svg%3E" alt="Partner 3" class="partner-logo">
+                    <h3>Partner Name</h3>
+                    <p>Description of partner services and how they enhance your event experience at Astralab.</p>
+                    <a href="#" class="partner-link">Visit Website →</a>
+                </div>
+
+                <!-- Partner 4 -->
+                <div class="partner-card">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 150'%3E%3Crect fill='%23f5f1e8' width='400' height='150'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='24' fill='%23333' opacity='0.5'%3EPartner Logo 4%3C/text%3E%3C/svg%3E" alt="Partner 4" class="partner-logo">
+                    <h3>Partner Name</h3>
+                    <p>Description of partner services and how they enhance your event experience at Astralab.</p>
+                    <a href="#" class="partner-link">Visit Website →</a>
+                </div>
+
+                <!-- Partner 5 -->
+                <div class="partner-card">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 150'%3E%3Crect fill='%23e6d4b4' width='400' height='150'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='24' fill='%23333' opacity='0.5'%3EPartner Logo 5%3C/text%3E%3C/svg%3E" alt="Partner 5" class="partner-logo">
+                    <h3>Partner Name</h3>
+                    <p>Description of partner services and how they enhance your event experience at Astralab.</p>
+                    <a href="#" class="partner-link">Visit Website →</a>
+                </div>
+
+                <!-- Partner 6 -->
+                <div class="partner-card">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 150'%3E%3Crect fill='%23190a2e' width='400' height='150'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='24' fill='%23fff' opacity='0.5'%3EPartner Logo 6%3C/text%3E%3C/svg%3E" alt="Partner 6" class="partner-logo">
+                    <h3>Partner Name</h3>
+                    <p>Description of partner services and how they enhance your event experience at Astralab.</p>
+                    <a href="#" class="partner-link">Visit Website →</a>
+                </div>
+            </div>
+
+            <h2 class="section-title">Our Services</h2>
+            <div class="services-list">
+                <div class="service-item">
+                    <div class="service-icon">🎵</div>
+                    <h3>Audio & Sound</h3>
+                    <p>Professional sound systems, DJ equipment, and acoustic optimization for any event type.</p>
+                </div>
+
+                <div class="service-item">
+                    <div class="service-icon">💡</div>
+                    <h3>Lighting Design</h3>
+                    <p>Customizable LED systems, ambient lighting, and professional stage lighting solutions.</p>
+                </div>
+
+                <div class="service-item">
+                    <div class="service-icon">🍽️</div>
+                    <h3>Catering Partners</h3>
+                    <p>Access to our network of premium catering services for all dietary preferences.</p>
+                </div>
+
+                <div class="service-item">
+                    <div class="service-icon">📸</div>
+                    <h3>Photography & Video</h3>
+                    <p>Professional photographers and videographers to capture your special moments.</p>
+                </div>
+
+                <div class="service-item">
+                    <div class="service-icon">🎨</div>
+                    <h3>Event Design</h3>
+                    <p>Creative direction, décor planning, and full-service event styling.</p>
+                </div>
+
+                <div class="service-item">
+                    <div class="service-icon">🎭</div>
+                    <h3>Entertainment</h3>
+                    <p>Live performers, DJs, and entertainment coordinators for memorable experiences.</p>
+                </div>
+
+                <div class="service-item">
+                    <div class="service-icon">📋</div>
+                    <h3>Event Planning</h3>
+                    <p>Full-service coordination from concept to execution for stress-free events.</p>
+                </div>
+
+                <div class="service-item">
+                    <div class="service-icon">🚗</div>
+                    <h3>Transportation</h3>
+                    <p>Valet services and transportation coordination for your guests.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p class="copyright">© 2025 Astralab Los Angeles. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Canvas Background Animation
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.hue = Math.random() * 60 + 240;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+
+                if (this.y < 0 || this.y > canvas.height || this.x < 0 || this.x > canvas.width) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = `hsla(${this.hue}, 70%, 60%, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        class GeometricShape {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 100 + 50;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.002;
+                this.opacity = Math.random() * 0.1 + 0.05;
+                this.sides = Math.random() > 0.5 ? 6 : 8;
+            }
+
+            update() {
+                this.rotation += this.rotationSpeed;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.strokeStyle = `rgba(138, 43, 226, ${this.opacity})`;
+                ctx.lineWidth = 2;
+
+                ctx.beginPath();
+                for (let i = 0; i < this.sides; i++) {
+                    const angle = (Math.PI * 2 * i) / this.sides;
+                    const x = Math.cos(angle) * this.size;
+                    const y = Math.sin(angle) * this.size;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        const particles = Array.from({ length: 100 }, () => new Particle());
+        const shapes = Array.from({ length: 8 }, () => new GeometricShape());
+
+        function animate() {
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            shapes.forEach(shape => {
+                shape.update();
+                shape.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Back to home with fade
+        function goBack() {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 600);
+        }
+    </script>
+</body>
+</html>
