@@ -599,7 +599,23 @@
     </div><!-- end content wrapper -->
 
     <!-- INSTAGRAM EMBED SCRIPT -->
-    <script async src="//www.instagram.com/embed.js"></script>
+   <!-- INSTAGRAM EMBED SCRIPT -->
+<script>
+    // Load Instagram embeds with delay to avoid rate limiting
+    setTimeout(function() {
+        var script = document.createElement('script');
+        script.src = 'https://www.instagram.com/embed.js';
+        script.async = true;
+        document.body.appendChild(script);
+        
+        // Process embeds after script loads
+        script.onload = function() {
+            if (window.instgrm) {
+                window.instgrm.Embeds.process();
+            }
+        };
+    }, 1000);
+</script>
     <script>
     // GENERATE FLOATING SPHERES ON LANDING PAGE
     function generateLandingSpheres() {
