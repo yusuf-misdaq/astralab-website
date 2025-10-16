@@ -152,12 +152,73 @@
 
         
         
-        /* GALLERY - INSTAGRAM EMBEDS */
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; margin-top: 3rem; }
-        .gallery-item { width: 100%; min-height: 400px; position: relative; border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.3s; background: rgba(255,255,255,0.02); }
-        .gallery-item:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(138,43,226,0.3); }
-        .gallery-item iframe { width: 100%; height: 100%; border: none; }
-        .gallery-item blockquote { margin: 0; }
+/* GALLERY - INSTAGRAM EMBEDS */
+.gallery-grid { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 2rem; 
+    margin-top: 3rem; 
+}
+
+.gallery-item { 
+    width: 100%; 
+    aspect-ratio: 4/5; /* Instagram's 1080x1350 ratio */
+    position: relative; 
+    border-radius: 20px 20px 0 0; /* Islamic arch effect */
+    overflow: hidden; 
+    cursor: pointer; 
+    transition: transform 0.3s; 
+    background: rgba(255,255,255,0.02);
+    box-shadow: 0 10px 30px rgba(138,43,226,0.2);
+}
+
+/* Islamic Arch Top */
+.gallery-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: inherit;
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    z-index: 1;
+}
+
+.gallery-item:hover { 
+    transform: translateY(-10px); 
+    box-shadow: 0 20px 50px rgba(138,43,226,0.4); 
+}
+
+.gallery-item iframe { 
+    position: absolute;
+    top: -60px; /* Hide caption area */
+    left: 0;
+    width: 100%; 
+    height: calc(100% + 200px); /* Extend to show full image */
+    border: none; 
+    pointer-events: none; /* Disable interaction with embed */
+}
+
+.gallery-item blockquote { 
+    margin: 0; 
+    height: 100%;
+}
+
+/* Mobile: 1 column */
+@media (max-width: 768px) {
+    .gallery-grid { 
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
         
         /* PAGE LINK CARDS - FIXED BUTTON SPACING */
         .page-card { background: rgba(245,241,232,0.05); backdrop-filter: blur(10px); border-radius: 20px; padding: 3rem; text-align: center; cursor: pointer; transition: all 0.4s ease; border: 2px solid rgba(245,241,232,0.1); }
@@ -311,24 +372,24 @@
     <div class="section-content">
         <h2>Events</h2>
         <div class="gallery-grid">
-            <div class="gallery-item">
+            <a href="https://www.instagram.com/p/DOT7dLrARpd/" target="_blank" class="gallery-item">
                 <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DOT7dLrARpd/" data-instgrm-version="14"></blockquote>
-            </div>
-            <div class="gallery-item">
+            </a>
+            <a href="https://www.instagram.com/p/DMy9WlxRcIC/" target="_blank" class="gallery-item">
                 <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DMy9WlxRcIC/" data-instgrm-version="14"></blockquote>
-            </div>
-            <div class="gallery-item">
+            </a>
+            <a href="https://www.instagram.com/p/DOv_9zAiQdk/" target="_blank" class="gallery-item">
                 <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DOv_9zAiQdk/" data-instgrm-version="14"></blockquote>
-            </div>
-            <div class="gallery-item">
+            </a>
+            <a href="https://www.instagram.com/p/DLrH96QMJWv/" target="_blank" class="gallery-item">
                 <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DLrH96QMJWv/" data-instgrm-version="14"></blockquote>
-            </div>
-            <div class="gallery-item">
+            </a>
+            <a href="https://www.instagram.com/p/DO6eYFXATRC/" target="_blank" class="gallery-item">
                 <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DO6eYFXATRC/" data-instgrm-version="14"></blockquote>
-            </div>
-            <div class="gallery-item">
+            </a>
+            <a href="https://www.instagram.com/p/DOJ-7RTkvZy/" target="_blank" class="gallery-item">
                 <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DOJ-7RTkvZy/" data-instgrm-version="14"></blockquote>
-            </div>
+            </a>
         </div>
     </div>
 </section>
