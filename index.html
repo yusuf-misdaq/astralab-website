@@ -86,7 +86,14 @@
         .nav-menu a:hover { color: var(--accent); transform: translateX(10px); }
         
         /* SECTIONS - REDUCED SPACING */
-        section { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2.5rem 2rem; position: relative; }
+        section { 
+    min-height: auto; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 4rem 2rem; 
+    position: relative; 
+}
         .section-content { max-width: 1200px; width: 100%; background: rgba(245,241,232,0.05); backdrop-filter: blur(10px); border-radius: 20px; padding: 3rem; box-shadow: 0 20px 60px rgba(0,0,0,0.5); transition: all 0.4s ease; }
         
         /* HOVER EFFECT FOR ALL SECTIONS */
@@ -99,7 +106,13 @@
         h2 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 2rem; text-align: center; font-weight: 300; letter-spacing: 2px; }
         
         /* HERO */
-        .hero { flex-direction: column; text-align: center; justify-content: center; }
+.hero { 
+    flex-direction: column; 
+    text-align: center; 
+    justify-content: center; 
+    min-height: 85vh; 
+    padding: 6rem 2rem 4rem; 
+}
         .hero-logo { width: 100%; max-width: 600px; margin-bottom: 2rem; }
         .hero h1 { font-size: clamp(3rem, 8vw, 7rem); font-weight: 300; margin-bottom: 1rem; letter-spacing: 3px; }
         .hero p { font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 300; opacity: 0.9; margin-bottom: 3rem; }
@@ -107,7 +120,16 @@
         .cta-button:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(245,241,232,0.3); }
         
         /* NEWSLETTER */
-        .newsletter { max-width: 600px; margin: 3rem auto; text-align: center; padding: 3rem; background: rgba(245,241,232,0.05); backdrop-filter: blur(10px); border-radius: 20px; transition: all 0.4s ease; }
+       .newsletter { 
+    max-width: 600px; 
+    margin: 0 auto 4rem auto; 
+    text-align: center; 
+    padding: 3rem; 
+    background: rgba(245,241,232,0.05); 
+    backdrop-filter: blur(10px); 
+    border-radius: 20px; 
+    transition: all 0.4s ease; 
+}
         .newsletter:hover {
             background: rgba(138, 43, 226, 0.15);
             box-shadow: 0 20px 60px rgba(138, 43, 226, 0.4);
